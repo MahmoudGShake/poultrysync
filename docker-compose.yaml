@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: poultrysync
+      MYSQL_USER: poultry
+      MYSQL_PASSWORD: poultry123
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: poultrysync
+      MYSQL_USER: poultry
+      MYSQL_PASSWORD: poultry123
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin123
+      DJANGO_SUPERUSER_EMAIL: admin@poultrysync.com
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn poultrysync.wsgi:application -b 0.0.0.0:8000"

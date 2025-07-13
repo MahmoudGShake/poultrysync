@@ -1,0 +1,16 @@
+from rest_framework.permissions import BasePermission, SAFE_METHODS
+import datetime
+
+class IsAdminOrOperator(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role in ['admin', 'operator']
+
+class IsNotViewer(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role != 'viewer'
+
+class CanEditOrderToday(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.role == 'operator':
+            return obj.created_at.date() == datetime.date.today()
+        return True
