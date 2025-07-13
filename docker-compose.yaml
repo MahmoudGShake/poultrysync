@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: poultrysync
@@ -30,6 +30,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+      - ./logs:/app/logs
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
