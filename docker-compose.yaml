@@ -20,7 +20,7 @@ services:
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-      MYSQL_DATABASE: poultrysync
+      MYSQL_DATABASE: poultrysync1
       MYSQL_USER: poultry
       MYSQL_PASSWORD: poultry123
       DJANGO_SUPERUSER_USERNAME: admin

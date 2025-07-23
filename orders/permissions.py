@@ -12,5 +12,5 @@ class IsNotViewer(BasePermission):
 class CanEditOrderToday(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.role == 'operator':
-            return obj.created_at.date() == datetime.date.today()
+            return obj.created_at.date() == datetime.datetime.utcnow().date()
         return True

@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated, AllowAny,IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action, api_view, permission_classes
 from django.http import HttpResponse
 from .models import Product, Order
@@ -17,7 +18,7 @@ logging.basicConfig(filename='logs/orders.log', level=logging.INFO)
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-    permission_classes = [IsNotViewer]
+    permission_classes = [IsAuthenticated,IsNotViewer]
 
     def get_queryset(self):
         return Product.objects.filter(company=self.request.user.company, is_active=True)
@@ -28,7 +29,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
-    permission_classes = [IsNotViewer, CanEditOrderToday]
+    permission_classes = [IsAuthenticated,IsNotViewer, CanEditOrderToday]
 
     def get_queryset(self):
         return Order.objects.filter(company=self.request.user.company)
@@ -42,7 +43,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-@permission_classes([IsAdminOrOperator])
+@permission_classes([IsAuthenticated,IsAdminOrOperator])
 def export_orders_csv(request):
     user = request.user
     orders = Order.objects.filter(company=user.company)

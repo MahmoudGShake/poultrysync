@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'orders',
+    'drf_yasg',
+    'rest_framework',
 ]
 AUTH_USER_MODEL = 'orders.CustomUser'
 MIDDLEWARE = [
@@ -77,27 +79,27 @@ WSGI_APPLICATION = 'poultrysync.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("MYSQL_DATABASE", "poultrysync"),
-        "USER": os.getenv("MYSQL_USER", "poultry"),
-        "PASSWORD": os.getenv("MYSQL_PASSWORD", "poultry123"),
-        "HOST": os.getenv("MYSQL_HOST", "db"),   # “db” = docker-compose service name
-        "PORT": os.getenv("MYSQL_PORT", "3306"),
-        "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-            "charset": "utf8mb4",
-        },
-    }
-}
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.getenv("MYSQL_DATABASE", "poultrysync"),
+#         "USER": os.getenv("MYSQL_USER", "poultry"),
+#         "PASSWORD": os.getenv("MYSQL_PASSWORD", "poultry123"),
+#         "HOST": os.getenv("MYSQL_HOST", "db"),   # “db” = docker-compose service name
+#         "PORT": os.getenv("MYSQL_PORT", "3306"),
+#         "OPTIONS": {
+#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+#             "charset": "utf8mb4",
+#         },
 #     }
 # }
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+STATIC_ROOT = BASE_DIR / "static"
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -138,3 +140,27 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT Authorization header. Example: "Bearer your_token_here"',
+        },
+    }
+}
+LOGIN_REDIRECT_URL = '/index/'
+LOGIN_URL = '/accounts/login/'

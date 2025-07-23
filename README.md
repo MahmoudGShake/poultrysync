@@ -77,14 +77,15 @@ It will create:
 
 ## 🔄 API Endpoints
 
-| Endpoint                  | Method | Access       | Description                    |
-|---------------------------|--------|--------------|--------------------------------|
-| `/api/products/`          | GET    | all          | List active products           |
-| `/api/products/`          | POST   | admin/operator | Create product               |
-| `/api/products/{id}/`     | DELETE | admin/operator | Soft-delete product         |
-| `/api/orders/`            | GET    | all          | List orders                    |
-| `/api/orders/`            | POST   | admin/operator | Create order (stock checked) |
-| `/api/orders/export/`     | GET    | admin/operator | Download CSV of orders      |
+| Endpoint              | Method | Access       | Description                  |
+|-----------------------|--------|--------------|------------------------------|
+| `/swagger/`           | GET    | all          | API Swagger documentation    |
+| `/api/products/`      | GET    | all          | List active products         |
+| `/api/products/`      | POST   | admin/operator | Create product               |
+| `/api/products/{id}/` | DELETE | admin/operator | Soft-delete product          |
+| `/api/orders/`        | GET    | all          | List orders                  |
+| `/api/orders/`        | POST   | admin/operator | Create order (stock checked) |
+| `/api/orders/export/` | GET    | admin/operator | Download CSV of orders       |
 
 ---
 
@@ -113,6 +114,11 @@ poultrysync/
 │   ├── forms.py
 │   └── management/commands/seed_demo.py
 ├── templates/orders/index.html
+├── templates/
+│   ├── orders/
+│       ├── index.html
+│   ├── registration/
+│       ├── login.html
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt

@@ -20,12 +20,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         user = self.context['request'].user
-        product = data['product']
-        quantity = data['quantity']
+        product = data.get('product')
+        quantity = data.get('quantity')
 
-        if not product.is_active:
+        if product is not None and not product.is_active:
             raise serializers.ValidationError("Cannot order inactive product.")
-        if product.stock < quantity:
+        if quantity is not None and product is not None and product.stock < quantity:
             raise serializers.ValidationError("Not enough stock.")
         return data
 

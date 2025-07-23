@@ -1,7 +1,30 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from django.contrib.auth import views as auth_views
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="PoultrySync API",
+      default_version='v1',
+      description="API documentation for Hosam Hamdy",
+      terms_of_service="https://www.poultrysync.com/ar",
+      contact=openapi.Contact(email="mahmoudgshaker2018@gmail.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+    authentication_classes=[],  # disable DRF login popup
+
+)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('orders.urls')),
+    #Swagger and ReDoc
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    #login
+    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
 ]

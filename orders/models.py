@@ -49,4 +49,4 @@ class Order(models.Model):
     shipped_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Order #{self.id} - {self.product.name} ({self.status})"
+        return f"Order #{self.id} - {self.product.name} ({self.status}) @ {self.created_at}"
